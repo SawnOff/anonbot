@@ -31,9 +31,9 @@ class RtmEventHandler(object):
         elif event_type == 'channel_joined':
             # you joined a channel
             users = self.clients.rtm.api_call("users.list")['members']
-        	for u in users:
-        		self.clients.rtm.api_call("im.open",user=u['id'])
-           	self.clients.rtm.api_call("channels.leave",channel=event['channel'])
+            for u in users:
+                self.clients.rtm.api_call("im.open",user=u['id'])
+            self.clients.rtm.api_call("channels.leave",channel=event['channel'])
         elif event_type == 'group_joined':
             # you joined a private group
             self.clients.rtm.api_call("groups.leave",channel=event['channel'])
