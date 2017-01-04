@@ -48,7 +48,7 @@ class RtmEventHandler(object):
 
             if self._is_direct_message(event['channel']):
                 # forward to everyone
-                info = self.clients.rtm.api_call("im.list")
+                info = self.clients.rtm.api_call("im.list")['ims']
                 for user in info:
                 	if user['is_user_deleted'] == False and user['user'] != event['user']:
             			self.clients.rtm.api_call("chat.postMessage", channel=user['id'], text=msg_txt)
