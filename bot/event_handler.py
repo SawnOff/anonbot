@@ -10,6 +10,11 @@ class RtmEventHandler(object):
         self.clients = slack_clients
         self.msg_writer = msg_writer
 
+        users = self.clients.rtm.api_call("users.list")['members']
+        for u in users:
+        	self.clients.rtm.api_call("im.open",user=u['id'])
+
+
     def handle(self, event):
 
         if 'type' in event:
@@ -25,10 +30,13 @@ class RtmEventHandler(object):
             self._handle_message(event)
         elif event_type == 'channel_joined':
             # you joined a channel
-            self.msg_writer.write_help_message(event['channel'])
+            users = self.clients.rtm.api_call("users.list")['members']
+        	for u in users:
+        		self.clients.rtm.api_call("im.open",user=u['id'])
+           	self.clients.rtm.api_call("channels.leave",channel=event['channel'])
         elif event_type == 'group_joined':
             # you joined a private group
-            self.msg_writer.write_help_message(event['channel'])
+            self.clients.rtm.api_call("groups.leave",channel=event['channel'])
         else:
             pass
 
@@ -38,21 +46,14 @@ class RtmEventHandler(object):
 
             msg_txt = event['text']
 
-            if self.clients.is_bot_mention(msg_txt) or self._is_direct_message(event['channel']):
-                # e.g. user typed: "@pybot tell me a joke!"
-                if 'help' in msg_txt:
-                    self.msg_writer.write_help_message(event['channel'])
-                elif re.search('hi|hey|hello|howdy', msg_txt):
-                    self.msg_writer.write_greeting(event['channel'], event['user'])
-                elif 'joke' in msg_txt:
-                    self.msg_writer.write_joke(event['channel'])
-                elif 'attachment' in msg_txt:
-                    self.msg_writer.demo_attachment(event['channel'])
-                elif 'echo' in msg_txt:
-                    self.msg_writer.send_message(event['channel'], msg_txt)
-                else:
-                    self.msg_writer.write_prompt(event['channel'])
+            if self._is_direct_message(event['channel']):
+                # forward to everyone
+                info = self.clients.rtm.api_call("im.list")
+                for user in info:
+                	if user['is_user_deleted'] == False and user['user'] != event['user']:
+            			self.clients.rtm.api_call("chat.postMessage", channel=user['id'], text=msg_txt)
 
+                
     def _is_direct_message(self, channel):
         """Check if channel is a direct message channel
 
