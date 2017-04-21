@@ -11,7 +11,7 @@ class RtmEventHandler(object):
         self.msg_writer = msg_writer
 
         users = self.clients.rtm.api_call("users.list")['members']
-        groups = self.clients.rtm.api_call("groups.list")['members']
+        groups = self.clients.rtm.api_call("groups.list")['groups']
         #for u in users:
         #self.clients.rtm.api_call("im.open",user=u['id'])
     
