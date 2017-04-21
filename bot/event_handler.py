@@ -11,9 +11,15 @@ class RtmEventHandler(object):
         self.msg_writer = msg_writer
 
         users = self.clients.rtm.api_call("users.list")['members']
+        user_ids = [ u['id'] for u in users ]
         groups = self.clients.rtm.api_call("groups.list")['groups']
-        #for u in users:
-        #self.clients.rtm.api_call("im.open",user=u['id'])
+        for g in groups:
+            for id in g['members']:
+                user_ids.remove(id)
+                
+        for u in user_ids:
+            new_g = self.clients.rtm.api_call("groups.create", name="anonchannel")
+            self.clients.rtm.api_call("groups.invite", channel=new_g['group']['id'], user=u)
     
     def handle(self, event):
 
