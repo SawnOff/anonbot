@@ -15,7 +15,7 @@ class RtmEventHandler(object):
         groups = self.clients.rtm.api_call("groups.list")['groups']
         for g in groups:
             for uid in g['members']:
-                if (uid in user_ids):
+                if uid in user_ids and g['name'] == "anonchannel - " + uid:
                     user_ids.remove(uid)
         
         for u in user_ids:
