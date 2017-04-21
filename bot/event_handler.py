@@ -20,7 +20,7 @@ class RtmEventHandler(object):
                 
         for u in user_ids:
             new_g = self.clients.rtm.api_call("groups.create", name="anonchannel")
-            self.clients.rtm.api_call("groups.invite", channel=new_g['group']['id'], user=u)
+            self.clients.rtm.api_call("groups.invite", channel=new_g['id'], user=u)
         
         groups = self.clients.rtm.api_call("groups.list")['groups']
     
