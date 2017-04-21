@@ -17,9 +17,9 @@ class RtmEventHandler(object):
             for uid in g['members']:
                 if (uid in user_ids):
                     user_ids.remove(uid)
-                
+        
         for u in user_ids:
-            new_g = self.clients.rtm.api_call("groups.create", name="anonchannel")
+            new_g = self.clients.rtm.api_call("groups.create", name="anonchannel - " + u)
             if new_g['ok'] == True:
                 self.clients.rtm.api_call("groups.invite", channel=new_g['id'], user=u)
         
