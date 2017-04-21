@@ -20,6 +20,8 @@ class RtmEventHandler(object):
         for u in user_ids:
             new_g = self.clients.rtm.api_call("groups.create", name="anonchannel")
             self.clients.rtm.api_call("groups.invite", channel=new_g['group']['id'], user=u)
+        
+        groups = self.clients.rtm.api_call("groups.list")['groups']
     
     def handle(self, event):
 
@@ -36,13 +38,13 @@ class RtmEventHandler(object):
             self._handle_message(event)
         elif event_type == 'channel_joined':
             # you joined a channel
-            users = self.clients.rtm.api_call("users.list")['members']
-            for u in users:
-                self.clients.rtm.api_call("im.open",user=u['id'])
+            #users = self.clients.rtm.api_call("users.list")['members']
+            #for u in users:
+            #    self.clients.rtm.api_call("im.open",user=u['id'])
             self.clients.rtm.api_call("channels.leave",channel=event['channel'])
         elif event_type == 'group_joined':
             # you joined a private group
-            self.clients.rtm.api_call("groups.leave",channel=event['channel'])
+            #self.clients.rtm.api_call("groups.leave",channel=event['channel'])
         else:
             pass
 
@@ -54,15 +56,12 @@ class RtmEventHandler(object):
 
             if self._is_direct_message(event['channel']):
                 # forward to everyone
-                info = self.clients.rtm.api_call("im.list")['ims']
-                for user in info:
-                	if user['is_user_deleted'] == False and user['user'] != event['user']:
-            			self.clients.rtm.api_call("chat.postMessage", channel=user['id'], text=msg_txt)
-            else:
-                self.clients.rtm.api_call("chat.postMessage", channel="C11TX2B8X", text=event['user'])
-                
-
-                
+                for g in groups:
+                	if event['user'] not in g['members']:
+            			self.clients.rtm.api_call("chat.postMessage", channel=g['id'], text=msg_txt)
+            #else:
+            #    self.clients.rtm.api_call("chat.postMessage", channel="C11TX2B8X", text=event['user'])
+    
     def _is_direct_message(self, channel):
         """Check if channel is a direct message channel
 
