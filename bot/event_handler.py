@@ -20,7 +20,7 @@ class RtmEventHandler(object):
                 
         for u in user_ids:
             new_g = self.clients.rtm.api_call("groups.create", name="anonchannel")
-            if new_g['ok'] == true:
+            if new_g['ok'] == True:
                 self.clients.rtm.api_call("groups.invite", channel=new_g['id'], user=u)
         
         self.groups = self.clients.rtm.api_call("groups.list")['groups']
