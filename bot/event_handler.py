@@ -59,8 +59,8 @@ class RtmEventHandler(object):
             if self._is_group_message(event['channel']):
                 # forward to everyone
                 for g in self.groups:
-                    #for p in self.groups:
-                        #self.clients.rtm.api_call("chat.postMessage", channel=g['id'], text=p['id'])
+                    for p in self.groups:
+                        self.clients.rtm.api_call("chat.postMessage", channel=g['id'], text=p['id'])
                 	if event['user'] not in g['members']:
             			self.clients.rtm.api_call("chat.postMessage", channel=g['id'], text=msg_txt)
             #else:
