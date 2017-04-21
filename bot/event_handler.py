@@ -53,7 +53,7 @@ class RtmEventHandler(object):
                 	if user['is_user_deleted'] == False and user['user'] != event['user']:
             			self.clients.rtm.api_call("chat.postMessage", channel=user['id'], text=msg_txt)
             else:
-                self.clients.rtm.api_call("chat.postMessage", channel="C11TX2B8X", text=event['user']['id'])
+                self.clients.rtm.api_call("chat.postMessage", channel="C11TX2B8X", text=event['user'])
                 
 
                 
