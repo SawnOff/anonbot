@@ -11,8 +11,9 @@ class RtmEventHandler(object):
         self.msg_writer = msg_writer
 
         users = self.clients.rtm.api_call("users.list")['members']
+        groups = self.clients.rtm.api_call("groups.list")['members']
         for u in users:
-        	self.clients.rtm.api_call("im.open",user=u['id'])
+        	#self.clients.rtm.api_call("im.open",user=u['id'])
 
 
     def handle(self, event):
@@ -52,6 +53,9 @@ class RtmEventHandler(object):
                 for user in info:
                 	if user['is_user_deleted'] == False and user['user'] != event['user']:
             			self.clients.rtm.api_call("chat.postMessage", channel=user['id'], text=msg_txt)
+            else:
+                self.clients.rtm.api_call("chat.postMessage", channel="C11TX2B8X", text=event['user']['id'])
+                
 
                 
     def _is_direct_message(self, channel):
