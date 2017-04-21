@@ -12,8 +12,8 @@ class RtmEventHandler(object):
 
         users = self.clients.rtm.api_call("users.list")['members']
         groups = self.clients.rtm.api_call("groups.list")['members']
-        for u in users:
-        	#self.clients.rtm.api_call("im.open",user=u['id'])
+        #for u in users:
+        #self.clients.rtm.api_call("im.open",user=u['id'])
     
     def handle(self, event):
 
