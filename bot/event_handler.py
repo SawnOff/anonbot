@@ -56,11 +56,11 @@ class RtmEventHandler(object):
 
             msg_txt = event['text']
 
-            if self._is_direct_message(event['channel']):
+            if self._is_group_message(event['channel']):
                 # forward to everyone
                 for g in self.groups:
-                    for p in self.groups:
-                        self.clients.rtm.api_call("chat.postMessage", channel=g['id'], text=p['id'])
+                    #for p in self.groups:
+                        #self.clients.rtm.api_call("chat.postMessage", channel=g['id'], text=p['id'])
                 	if event['user'] not in g['members']:
             			self.clients.rtm.api_call("chat.postMessage", channel=g['id'], text=msg_txt)
             #else:
@@ -73,3 +73,11 @@ class RtmEventHandler(object):
             channel (str): Channel in which a message was received
         """
         return channel.startswith('D')
+    
+    def _is_group_message(self, channel):
+        """Check if channel is a direct message channel
+
+        Args:
+            channel (str): Channel in which a message was received
+        """
+        return channel.startswith('G')
