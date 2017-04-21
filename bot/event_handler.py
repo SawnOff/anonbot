@@ -19,6 +19,7 @@ class RtmEventHandler(object):
                     if uid in user_ids:
                         user_ids.remove(uid)
                 if len(g['members']) <= 1:
+                    self.clients.rtm.api_call("chat.postMessage", channel=g['id'], text=user_id)
                     user_id = g['name'][-7:]
                     self.clients.rtm.api_call("groups.invite", channel=g['id'], user=user_id)
         for u in user_ids:
