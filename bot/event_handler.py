@@ -42,7 +42,7 @@ class RtmEventHandler(object):
             #for u in users:
             #    self.clients.rtm.api_call("im.open",user=u['id'])
             self.clients.rtm.api_call("channels.leave",channel=event['channel'])
-        elif event_type == 'group_joined':
+            #elif event_type == 'group_joined':
             # you joined a private group
             #self.clients.rtm.api_call("groups.leave",channel=event['channel'])
         else:
