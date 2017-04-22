@@ -11,21 +11,22 @@ class RtmEventHandler(object):
         self.msg_writer = msg_writer
 
         users = self.clients.rtm.api_call("users.list")['members']
-        user_ids = [ u['id'] for u in users ]
+        user_ids = [u['id'] if u['deleted']==False else "" for u in users ]
         groups = self.clients.rtm.api_call("groups.list")['groups']
         for g in groups:
             if g['name'][:11] == "anonchannel":
                 for uid in g['members']:
-                    if uid in user_ids and user['deleted'] == False:
+                    if uid in users:
                         user_ids.remove(uid)
                 if len(g['members']) <= 1:
                     user_id = g['name'][-7:]
                     self.clients.rtm.api_call("chat.postMessage", channel=g['id'], text="<@" + user_id + ">")
                     self.clients.rtm.api_call("groups.invite", channel=g['id'], user=user_id)
         for u in user_ids:
-            new_g = self.clients.rtm.api_call("groups.create", name="anonchannel::" + u)
-            if new_g['ok'] == True:
-                self.clients.rtm.api_call("groups.invite", channel=new_g['group']['id'], user=u)
+            if u != ""
+                new_g = self.clients.rtm.api_call("groups.create", name="anonchannel::" + u)
+                if new_g['ok'] == True:
+                    self.clients.rtm.api_call("groups.invite", channel=new_g['group']['id'], user=u)
         
         self.groups = self.clients.rtm.api_call("groups.list")['groups']
     
